@@ -1,39 +1,24 @@
 import { CONFIG } from './config.js';
+import { Renderer } from './renderer.js';
 
 const canvas = document.getElementById('game-canvas');
-const ctx = canvas.getContext('2d');
+const renderer = new Renderer(canvas);
 
-const sizePx = CONFIG.GRID_SIZE * CONFIG.CELL_SIZE;
-canvas.width = sizePx;
-canvas.height = sizePx;
+// ВРЕМЕННО: тестовое состояние. На этапе 3 его заменит модуль game.js
+const state = {
+  snake: [
+    { x: 10, y: 10 },
+    { x: 9, y: 10 },
+    { x: 8, y: 10 },
+  ],
+  food: { x: 15, y: 6 },
+};
 
-let tickCount = 0;
 let lastTime = performance.now();
 let accumulator = 0;
 
 function update() {
-  tickCount++;
-}
-
-function render() {
-  ctx.fillStyle = CONFIG.COLORS.BACKGROUND;
-  ctx.fillRect(0, 0, sizePx, sizePx);
-
-  ctx.strokeStyle = CONFIG.COLORS.GRID;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  for (let i = 1; i < CONFIG.GRID_SIZE; i++) {
-    const pos = i * CONFIG.CELL_SIZE + 0.5;
-    ctx.moveTo(pos, 0);
-    ctx.lineTo(pos, sizePx);
-    ctx.moveTo(0, pos);
-    ctx.lineTo(sizePx, pos);
-  }
-  ctx.stroke();
-
-  ctx.fillStyle = CONFIG.COLORS.TEXT;
-  ctx.font = '16px monospace';
-  ctx.fillText(`ticks: ${tickCount}`, 10, 24);
+  // пока пусто: логика появится на этапе 3
 }
 
 function frame(now) {
@@ -46,7 +31,7 @@ function frame(now) {
     accumulator -= CONFIG.TICK_MS;
   }
 
-  render();
+  renderer.render(state);
   requestAnimationFrame(frame);
 }
 
