@@ -5,6 +5,7 @@ export class Game {
     #food;
     #direction;
     #turnQueue;
+    #score;
 
     constructor() {
         this.reset();
@@ -20,11 +21,27 @@ export class Game {
             x: center - i,
             y: center,
         }));
-        this.#food = { x: 15, y: 6 };
+        this.#score = 0;
+        this.#food = this.#spawnFood();
+    }
+
+    #spawnFood() {
+        const { GRID_SIZE } = CONFIG;
+        const occupied = new Set(this.#snake.map(({ x, y }) => `${x},${y}`));
+        const freeCells = [];
+
+        for (let y = 0; y < GRID_SIZE; y++) {
+        for (let x = 0; x < GRID_SIZE; x++) {
+            if (!occupied.has(`${x},${y}`)) freeCells.push({ x, y });
+        }
+        }
+
+        if (freeCells.length === 0) return null; // поле заполнено, обработаем на этапе 6
+        return freeCells[Math.floor(Math.random() * freeCells.length)];
     }
 
     get state() {
-        return { snake: this.#snake, food: this.#food };
+        return { snake: this.#snake, food: this.#food, score: this.#score };
     }
 
     turn(direction) {
@@ -48,7 +65,14 @@ export class Game {
         };
 
         this.#snake.unshift(newHead);
+
+        if (this.#food && isSame(newHead, this.#food)) {
+        this.#score += CONFIG.POINTS_PER_FOOD;
+        this.#food = this.#spawnFood();
+        } else {
         this.#snake.pop();
+        }
+
     }
 }
 

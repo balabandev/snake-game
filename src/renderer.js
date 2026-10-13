@@ -14,7 +14,7 @@ export class Renderer {
   render(state) {
     this.#drawBackground();
     this.#drawGrid();
-    this.#drawFood(state.food);
+    if (state.food) this.#drawFood(state.food);
     this.#drawSnake(state.snake);
   }
 

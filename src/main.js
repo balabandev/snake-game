@@ -6,6 +6,8 @@ import { Input } from './input.js';
 const canvas = document.getElementById('game-canvas');
 const renderer = new Renderer(canvas);
 const game = new Game();
+const scoreElement = document.getElementById('score');
+let displayedScore = 0;
 new Input((direction) => game.turn(direction));
 
 let lastTime = performance.now();
@@ -19,6 +21,12 @@ function frame(now) {
   while (accumulator >= CONFIG.TICK_MS) {
     game.tick();
     accumulator -= CONFIG.TICK_MS;
+  }
+
+    const { score } = game.state;
+  if (score !== displayedScore) {
+    scoreElement.textContent = score;
+    displayedScore = score;
   }
 
   renderer.render(game.state);

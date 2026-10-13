@@ -5,6 +5,7 @@ export const CONFIG = {
     CELL_RADIUS: 6,
     TICK_MS: 120,
     INITIAL_SNAKE_LENGTH: 3,
+    POINTS_PER_FOOD: 1,
     DIRECTIONS: {
     UP:    { x: 0,  y: -1 },
     DOWN:  { x: 0,  y: 1 },
