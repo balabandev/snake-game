@@ -1,10 +1,12 @@
 import { CONFIG } from './config.js';
 import { Renderer } from './renderer.js';
 import { Game } from './game.js';
+import { Input } from './input.js';
 
 const canvas = document.getElementById('game-canvas');
 const renderer = new Renderer(canvas);
 const game = new Game();
+new Input((direction) => game.turn(direction));
 
 let lastTime = performance.now();
 let accumulator = 0;

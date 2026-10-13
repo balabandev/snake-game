@@ -11,6 +11,13 @@ export const CONFIG = {
     LEFT:  { x: -1, y: 0 },
     RIGHT: { x: 1,  y: 0 },
     },
+    MAX_QUEUED_TURNS: 2,
+    KEY_BINDINGS: {
+        ArrowUp: 'UP', KeyW: 'UP',
+        ArrowDown: 'DOWN', KeyS: 'DOWN',
+        ArrowLeft: 'LEFT', KeyA: 'LEFT',
+        ArrowRight: 'RIGHT', KeyD: 'RIGHT',
+    },
     MAX_FRAME_MS: 250,
     COLORS: {
         BACKGROUND: '#1b1e27',
