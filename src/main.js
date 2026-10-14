@@ -8,7 +8,12 @@ const renderer = new Renderer(canvas);
 const game = new Game();
 const scoreElement = document.getElementById('score');
 let displayedScore = 0;
-new Input((direction) => game.turn(direction));
+new Input({
+  onDirection: (direction) => game.turn(direction),
+  onRestart: () => {
+    if (game.state.status !== CONFIG.STATUS.PLAYING) game.reset();
+  },
+});
 
 let lastTime = performance.now();
 let accumulator = 0;

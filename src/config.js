@@ -26,5 +26,18 @@ export const CONFIG = {
         SNAKE_HEAD: '#7ee787',
         SNAKE_BODY: '#3fb950',
         FOOD: '#ff6b6b',
+        OVERLAY: 'rgba(18, 20, 26, 0.75)',
+        TEXT: '#e6e6e6',
+        TEXT_MUTED: '#9aa0ad',
+    },
+    STATUS: {
+        PLAYING: 'playing',
+        GAME_OVER: 'game_over',
+        WON: 'won',
+    },
+    RESTART_KEYS: ['Enter', 'Space'],
+    FONT: {
+        TITLE: 'bold 32px monospace',
+        HINT: '16px monospace',
     },
 }

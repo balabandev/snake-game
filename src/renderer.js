@@ -1,5 +1,7 @@
 import { CONFIG } from './config.js';
 
+const OVERLAY_OFFSET_Y = { TITLE: -24, SCORE: 12, HINT: 40 };
+
 export class Renderer {
   #ctx;
   #sizePx;
@@ -16,6 +18,8 @@ export class Renderer {
     this.#drawGrid();
     if (state.food) this.#drawFood(state.food);
     this.#drawSnake(state.snake);
+
+    if (state.status !== CONFIG.STATUS.PLAYING) this.#drawOverlay(state);
   }
 
   #drawBackground() {
@@ -73,5 +77,28 @@ export class Renderer {
       CELL_RADIUS,
     );
     this.#ctx.fill();
+  }
+
+  #drawOverlay({ status, score }) {
+    const ctx = this.#ctx;
+    const center = this.#sizePx / 2;
+    const title = status === CONFIG.STATUS.WON ? 'Победа!' : 'Игра окончена';
+
+    ctx.save();
+    ctx.fillStyle = CONFIG.COLORS.OVERLAY;
+    ctx.fillRect(0, 0, this.#sizePx, this.#sizePx);
+
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    ctx.fillStyle = CONFIG.COLORS.TEXT;
+    ctx.font = CONFIG.FONT.TITLE;
+    ctx.fillText(title, center, center + OVERLAY_OFFSET_Y.TITLE);
+
+    ctx.fillStyle = CONFIG.COLORS.TEXT_MUTED;
+    ctx.font = CONFIG.FONT.HINT;
+    ctx.fillText(`Счёт: ${score}`, center, center + OVERLAY_OFFSET_Y.SCORE);
+    ctx.fillText('Пробел или Enter: заново', center, center + OVERLAY_OFFSET_Y.HINT);
+    ctx.restore();
   }
 }
