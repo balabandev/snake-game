@@ -1,40 +1,49 @@
 import { CONFIG } from './config.js';
-import { Renderer } from './renderer.js';
 import { Game } from './game.js';
+import { Hud } from './hud.js';
 import { Input } from './input.js';
+import { Renderer } from './renderer.js';
+import { loadHighScore, saveHighScore } from './storage.js';
 
-const canvas = document.getElementById('game-canvas');
-const renderer = new Renderer(canvas);
+const renderer = new Renderer(document.getElementById('game-canvas'));
+const hud = new Hud();
 const game = new Game();
-const scoreElement = document.getElementById('score');
-let displayedScore = 0;
+let highScore = loadHighScore();
+
 new Input({
   onDirection: (direction) => game.turn(direction),
-  onRestart: () => {
-    if (game.state.status !== CONFIG.STATUS.PLAYING) game.reset();
-  },
+  onRestart: () => game.restart(),
+  onPause: () => game.togglePause(),
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) game.pause();
 });
 
 let lastTime = performance.now();
 let accumulator = 0;
+
+function updateHighScore(score) {
+  if (score <= highScore) return;
+  highScore = score;
+  saveHighScore(highScore);
+}
 
 function frame(now) {
   const delta = Math.min(now - lastTime, CONFIG.MAX_FRAME_MS);
   lastTime = now;
   accumulator += delta;
 
-  while (accumulator >= CONFIG.TICK_MS) {
+  while (accumulator >= game.tickMs) {
+    accumulator -= game.tickMs;
     game.tick();
-    accumulator -= CONFIG.TICK_MS;
   }
 
-    const { score } = game.state;
-  if (score !== displayedScore) {
-    scoreElement.textContent = score;
-    displayedScore = score;
-  }
+  const state = game.state;
+  updateHighScore(state.score);
+  hud.update(state.score, highScore);
+  renderer.render(state);
 
-  renderer.render(game.state);
   requestAnimationFrame(frame);
 }
 

@@ -36,6 +36,30 @@ export class Game {
     };
   }
 
+  get tickMs() {
+    const { TICK_MS, MIN_TICK_MS, SPEED_STEP_MS } = CONFIG;
+    return Math.max(MIN_TICK_MS, TICK_MS - this.#score * SPEED_STEP_MS);
+  }
+
+  restart() {
+    const { GAME_OVER, WON } = CONFIG.STATUS;
+    if (this.#status === GAME_OVER || this.#status === WON) this.reset();
+  }
+
+  pause() {
+    if (this.#status === CONFIG.STATUS.PLAYING) {
+      this.#status = CONFIG.STATUS.PAUSED;
+    }
+  }
+
+  togglePause() {
+    if (this.#status === CONFIG.STATUS.PAUSED) {
+      this.#status = CONFIG.STATUS.PLAYING;
+    } else {
+      this.pause();
+    }
+  }
+
   turn(direction) {
     if (this.#status !== CONFIG.STATUS.PLAYING) return;
     if (this.#turnQueue.length >= CONFIG.MAX_QUEUED_TURNS) return;

@@ -2,6 +2,12 @@ import { CONFIG } from './config.js';
 
 const OVERLAY_OFFSET_Y = { TITLE: -24, SCORE: 12, HINT: 40 };
 
+const OVERLAY_TEXT = {
+  [CONFIG.STATUS.GAME_OVER]: { title: 'Игра окончена', hint: 'Пробел или Enter: заново' },
+  [CONFIG.STATUS.WON]: { title: 'Победа!', hint: 'Пробел или Enter: заново' },
+  [CONFIG.STATUS.PAUSED]: { title: 'Пауза', hint: 'P или Esc: продолжить' },
+};
+
 export class Renderer {
   #ctx;
   #sizePx;
@@ -82,7 +88,7 @@ export class Renderer {
   #drawOverlay({ status, score }) {
     const ctx = this.#ctx;
     const center = this.#sizePx / 2;
-    const title = status === CONFIG.STATUS.WON ? 'Победа!' : 'Игра окончена';
+    const { title, hint } = OVERLAY_TEXT[status];
 
     ctx.save();
     ctx.fillStyle = CONFIG.COLORS.OVERLAY;
@@ -98,7 +104,7 @@ export class Renderer {
     ctx.fillStyle = CONFIG.COLORS.TEXT_MUTED;
     ctx.font = CONFIG.FONT.HINT;
     ctx.fillText(`Счёт: ${score}`, center, center + OVERLAY_OFFSET_Y.SCORE);
-    ctx.fillText('Пробел или Enter: заново', center, center + OVERLAY_OFFSET_Y.HINT);
+    ctx.fillText(hint, center, center + OVERLAY_OFFSET_Y.HINT);
     ctx.restore();
   }
 }
