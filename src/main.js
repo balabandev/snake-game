@@ -4,8 +4,10 @@ import { Hud } from './hud.js';
 import { Input } from './input.js';
 import { Renderer } from './renderer.js';
 import { loadHighScore, saveHighScore } from './storage.js';
+import { TouchInput } from './touch.js';
 
-const renderer = new Renderer(document.getElementById('game-canvas'));
+const canvas = document.getElementById('game-canvas');
+const renderer = new Renderer(canvas);
 const hud = new Hud();
 const game = new Game();
 let highScore = loadHighScore();
@@ -14,6 +16,14 @@ new Input({
   onDirection: (direction) => game.turn(direction),
   onRestart: () => game.restart(),
   onPause: () => game.togglePause(),
+});
+
+new TouchInput(canvas, {
+  onDirection: (direction) => game.turn(direction),
+  onTap: () => {
+    if (game.state.status === CONFIG.STATUS.PAUSED) game.togglePause();
+    else game.restart();
+  },
 });
 
 document.addEventListener('visibilitychange', () => {

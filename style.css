@@ -60,11 +60,10 @@ body {
 }
 
 #game-canvas {
-  display: block;
-  width: 100%;
+  max-width: 100%;
   height: auto;
-  aspect-ratio: 1 / 1;
+  touch-action: none;
+  user-select: none;
   border: 2px solid #2a2f3a;
   border-radius: 8px;
-  touch-action: none; /* пригодится для свайпов: браузер не будет скроллить */
 }

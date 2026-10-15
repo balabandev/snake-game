@@ -12,6 +12,7 @@ export const CONFIG = {
   INITIAL_SNAKE_LENGTH: 3,
   POINTS_PER_FOOD: 1,
   MAX_QUEUED_TURNS: 2,
+  SWIPE_MIN_PX: 24,
 
   STORAGE_KEY_HIGH_SCORE: 'snake:highScore',
 
