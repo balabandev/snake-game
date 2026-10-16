@@ -7,8 +7,10 @@ export class Game {
   #turnQueue;
   #score;
   #status;
+  #random;
 
-  constructor() {
+  constructor(random = Math.random) {
+    this.#random = random;
     this.reset();
   }
 
@@ -118,7 +120,7 @@ export class Game {
     }
 
     if (freeCells.length === 0) return null;
-    return freeCells[Math.floor(Math.random() * freeCells.length)];
+    return freeCells[Math.floor(this.#random() * freeCells.length)];
   }
 }
 
